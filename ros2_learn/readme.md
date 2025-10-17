@@ -15,7 +15,6 @@ sudo apt install ros-$ROS_DISTRO-rqt-tf-tree
 2. 删除旧的配置文件以便于自动更新配置文件
 ```
 rm -r ~/.config/ros.org/rqt_gui.ini
-
 ```
 3. 图形化查看
 * 打开rqt
