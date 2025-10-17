@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_name">
+  
+  <!-- 宏定义：方形零件 -->
+  <xacro:macro name="linker_box" params="name length width height color_r color_g color_b color_a mass">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 长方体 -->
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </visual>
+      <!-- 物理描述 -->
+      <collision>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 长方体 -->
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </collision>
+      <!-- 物理属性 -->
+      <inertial>
+        <mass value="${mass}"/>
+        <inertia ixx="${(mass/12)*(height*height+width*width)}" ixy="0.0" ixz="0.0" iyy="${(mass/12)*(length*length+width*width)}" iyz="0.0" izz="${(mass/12)*(length*length+height*height)}"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+  
+  <!-- 宏定义：圆柱形零件 -->
+  <xacro:macro name="linker_cylinder" params="name radius length origin_rpy_r origin_rpy_p origin_rpy_y color_r color_g color_b color_a mass">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 圆柱体 -->
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </visual>
+      <!-- 物理描述 -->
+      <collision>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 圆柱体 -->
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </collision>
+      <!-- 物理属性 -->
+      <inertial>
+        <mass value="${mass}"/>
+        <inertia ixx="${(mass/12)*(3*radius*radius+length*length)}" ixy="0.0" ixz="0.0" iyy="${(mass/12)*(3*radius*radius+length*length)}" iyz="0.0" izz="${(mass/2)*(radius*radius)}"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <!-- 宏定义：球形零件 -->
+  <xacro:macro name="linker_sphere" params="name radius color_r color_g color_b color_a mass">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 球体 -->
+          <sphere radius="${radius}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </visual>
+      <!-- 物理描述 -->
+      <collision>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 球体 -->
+          <sphere radius="${radius}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </collision>
+      <!-- 物理属性 -->
+      <inertial>
+        <mass value="${mass}"/>
+        <inertia ixx="${(2/5)*mass*(radius*radius)}" ixy="0.0" ixz="0.0" iyy="${(2/5)*mass*(radius*radius)}" iyz="0.0" izz="${(2/5)*mass*(radius*radius)}"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <!-- 宏定义：固定连接 -->
+  <xacro:macro name="joint_fixed" params="name parent child origin_xyz_x origin_xyz_y origin_xyz_z origin_rpy_r origin_rpy_p origin_rpy_y">
+  <!-- 固定连接 -->
+    <joint name="${name}" type="fixed">
+        <!-- 父对象 -->
+        <parent link="${parent}"/>
+        <!-- 子对象 -->
+        <child link="${child}"/>
+        <!-- 固定位置 -->
+        <origin xyz="${origin_xyz_x} ${origin_xyz_y} ${origin_xyz_z}" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- 宏定义：连续连接 -->
+  <xacro:macro name="joint_continuous" params="name parent child origin_xyz_x origin_xyz_y origin_xyz_z origin_rpy_r origin_rpy_p origin_rpy_y axis_x axis_y axis_z">
+  <!-- 连续连接 -->
+    <joint name="${name}" type="continuous">
+        <!-- 父对象 -->
+        <parent link="${parent}"/>
+        <!-- 子对象 -->
+        <child link="${child}"/>
+        <!-- 固定位置 -->
+        <origin xyz="${origin_xyz_x} ${origin_xyz_y} ${origin_xyz_z}" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+        <!-- 旋转轴 -->
+        <axis xyz="${axis_x} ${axis_y} ${axis_z}"/>
+    </joint>
+  </xacro:macro>
+
+<!-- 宏定义：差速控制 -->
+<xacro:macro name="diffdriver" params="namespace left_joint right_joint wheel_separation wheel_diameter odometry_frame robot_base_frame">
+<!-- 差速控制 -->
+    <gazebo>
+    <!-- Gazebo差速控制插件 -->
+        <plugin name="gazebo_ros_diff_drive" filename="libgazebo_ros_diff_drive.so">
+          <!-- ROS通信配置 -->
+          <ros>
+            <!-- 设置命名空间 -->
+            <namespace>${namespace}</namespace>
+          </ros>
+            <!-- 更新频率 -->
+            <update_rate>50</update_rate>
+            <!-- 左轮joint名称 -->
+            <left_joint>${left_joint}</left_joint>
+            <!-- 右轮joint名称 -->
+            <right_joint>${right_joint}</right_joint>
+            <!-- 两轮中心距离 -->
+            <wheel_separation>${wheel_separation}</wheel_separation>
+            <!-- 轮子半径 -->
+            <wheel_diameter>${wheel_diameter}</wheel_diameter>
+            <!-- 轮子的最大扭矩 -->
+            <max_wheel_torque>20</max_wheel_torque>
+            <!-- 轮子的最大角加速度 -->
+            <max_wheel_acceleration>1.0</max_wheel_acceleration>
+            <!-- 命令话题名称 -->
+            <command_topic>cmd_vel</command_topic>
+            <!-- 是否发布里程计 -->
+            <publish_odom>true</publish_odom>
+            <!-- 是否发布里程计tf -->
+            <publish_odom_tf>true</publish_odom_tf>
+            <!-- 是否发布轮子tf -->
+            <publish_wheel_tf>true</publish_wheel_tf>
+            <!-- 里程计话题名称 -->
+            <odometry_topic>odom</odometry_topic>
+            <!-- 里程计坐标系 -->
+            <odometry_frame>${odometry_frame}</odometry_frame>
+            <!-- 机器人坐标系 -->
+            <robot_base_frame>${robot_base_frame}</robot_base_frame>
+        </plugin>
+    </gazebo>
+</xacro:macro>
+
+</robot>
