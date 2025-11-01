@@ -13,3 +13,8 @@
 * 完善了launch文件使测试过程更加自动化
 * 完善了readme.md
 <img width="2158" height="861" alt="image" src="https://github.com/user-attachments/assets/42ffbf2b-658e-4477-93aa-5fbccab9e30b" />
+
+### v3
+* 更新了readme.md
+* 这是ROS2+ClassicGazebo的最终版本
+* 后续将转向ROS2+IgnitionGazebo
