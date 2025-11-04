@@ -16,9 +16,10 @@
 
 ### v3
 * 更新了readme.md
-* 这是ROS2+ClassicGazebo的最终版本
-* 后续将转向ROS2+IgnitionGazebo
+* 这可能是ROS2Humble+ClassicGazebo的最终版本
+* 后续将转向ROS2Jazzy+IgnitionGazebo
 
 ### v4
-* 修复了一些bug
-* 更新到最终稳定版
+* 调整了ROS2Humble+ClassicGazebo部分内容，这可能是最终发布
+* 增加了ROS2Jazzy+IgnitionGazebo的移植例程
+* 重新调整了项目结构以适应更新
