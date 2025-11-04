@@ -23,3 +23,4 @@
 * 调整了ROS2Humble+ClassicGazebo部分内容，这可能是最终发布
 * 增加了ROS2Jazzy+IgnitionGazebo的移植例程
 * 重新调整了项目结构以适应更新
+<img width="2560" height="1080" alt="e44896efcc14b2af60286410f1aa2aea" src="https://github.com/user-attachments/assets/d9a56036-9a9d-43a0-83a4-407caf6840c8" />
