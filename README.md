@@ -18,3 +18,7 @@
 * 更新了readme.md
 * 这是ROS2+ClassicGazebo的最终版本
 * 后续将转向ROS2+IgnitionGazebo
+
+### v4
+* 修复了一些bug
+* 更新到最终稳定版
