@@ -1,0 +1,382 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_name">
+  
+  <!-- 宏定义：支撑 -->
+  <xacro:macro name="linker_support" params="name">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 长方体 -->
+          <box size="0.0 0.0 0.0"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="0.0 0.0 0.0 0.0"/>
+        </material>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <!-- 宏定义：方形零件 -->
+  <xacro:macro name="linker_box" params="name length width height color_r color_g color_b color_a mass physics:=true">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 长方体 -->
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </visual>
+      <!-- 是否启用物理 -->
+      <xacro:if value="${physics}">
+        <!-- 物理描述 -->
+        <collision>
+          <!-- 相对坐标系 -->
+          <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+          <!-- 几何形状 -->
+          <geometry>
+            <!-- 长方体 -->
+            <box size="${length} ${width} ${height}"/>
+          </geometry>
+          <!-- 材质 -->
+          <material name="material_${name}">
+            <!-- 颜色 -->
+            <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+          </material>
+        </collision>
+        <!-- 物理属性 -->
+        <inertial>
+          <mass value="${mass}"/>
+          <inertia ixx="${(mass/12)*(height*height+width*width)}" ixy="0.0" ixz="0.0" iyy="${(mass/12)*(length*length+width*width)}" iyz="0.0" izz="${(mass/12)*(length*length+height*height)}"/>
+        </inertial>
+      </xacro:if>
+    </link>
+  </xacro:macro>
+  
+  <!-- 宏定义：圆柱形零件 -->
+  <xacro:macro name="linker_cylinder" params="name radius length origin_rpy_r origin_rpy_p origin_rpy_y color_r color_g color_b color_a mass physics:=true">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 圆柱体 -->
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </visual>
+      <!-- 是否启用物理 -->
+      <xacro:if value="${physics}">
+        <!-- 物理描述 -->
+        <collision>
+          <!-- 相对坐标系 -->
+          <origin xyz="0.0 0.0 0.0" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+          <!-- 几何形状 -->
+          <geometry>
+            <!-- 圆柱体 -->
+            <cylinder radius="${radius}" length="${length}"/>
+          </geometry>
+          <!-- 材质 -->
+          <material name="material_${name}">
+            <!-- 颜色 -->
+            <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+          </material>
+        </collision>
+        <!-- 物理属性 -->
+        <inertial>
+          <mass value="${mass}"/>
+          <inertia ixx="${(mass/12)*(3*radius*radius+length*length)}" ixy="0.0" ixz="0.0" iyy="${(mass/12)*(3*radius*radius+length*length)}" iyz="0.0" izz="${(mass/2)*(radius*radius)}"/>
+        </inertial>
+      </xacro:if>
+    </link>
+  </xacro:macro>
+
+  <!-- 宏定义：球形零件 -->
+  <xacro:macro name="linker_sphere" params="name radius color_r color_g color_b color_a mass physics:=true">
+    <!-- 零件描述 -->
+    <link name="${name}">
+      <!-- 外观描述 -->
+      <visual>
+        <!-- 相对坐标系 -->
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <!-- 几何形状 -->
+        <geometry>
+          <!-- 球体 -->
+          <sphere radius="${radius}"/>
+        </geometry>
+        <!-- 材质 -->
+        <material name="material_${name}">
+          <!-- 颜色 -->
+          <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+        </material>
+      </visual>
+      <!-- 是否启用物理 -->
+      <xacro:if value="${physics}">
+        <!-- 物理描述 -->
+        <collision>
+          <!-- 相对坐标系 -->
+          <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+          <!-- 几何形状 -->
+          <geometry>
+            <!-- 球体 -->
+            <sphere radius="${radius}"/>
+          </geometry>
+          <!-- 材质 -->
+          <material name="material_${name}">
+            <!-- 颜色 -->
+            <color rgba="${color_r} ${color_g} ${color_b} ${color_a}"/>
+          </material>
+        </collision>
+        <!-- 物理属性 -->
+        <inertial>
+          <mass value="${mass}"/>
+          <inertia ixx="${(2/5)*mass*(radius*radius)}" ixy="0.0" ixz="0.0" iyy="${(2/5)*mass*(radius*radius)}" iyz="0.0" izz="${(2/5)*mass*(radius*radius)}"/>
+        </inertial>
+      </xacro:if>
+    </link>
+  </xacro:macro>
+
+  <!-- 宏定义：固定连接 -->
+  <xacro:macro name="joint_fixed" params="name parent child origin_xyz_x origin_xyz_y origin_xyz_z origin_rpy_r origin_rpy_p origin_rpy_y">
+  <!-- 固定连接 -->
+    <joint name="${name}" type="fixed">
+        <!-- 父对象 -->
+        <parent link="${parent}"/>
+        <!-- 子对象 -->
+        <child link="${child}"/>
+        <!-- 固定位置 -->
+        <origin xyz="${origin_xyz_x} ${origin_xyz_y} ${origin_xyz_z}" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- 宏定义：连续连接 -->
+  <xacro:macro name="joint_continuous" params="name parent child origin_xyz_x origin_xyz_y origin_xyz_z origin_rpy_r origin_rpy_p origin_rpy_y axis_x axis_y axis_z">
+  <!-- 连续连接 -->
+    <joint name="${name}" type="continuous">
+        <!-- 父对象 -->
+        <parent link="${parent}"/>
+        <!-- 子对象 -->
+        <child link="${child}"/>
+        <!-- 固定位置 -->
+        <origin xyz="${origin_xyz_x} ${origin_xyz_y} ${origin_xyz_z}" rpy="${origin_rpy_r} ${origin_rpy_p} ${origin_rpy_y}"/>
+        <!-- 旋转轴 -->
+        <axis xyz="${axis_x} ${axis_y} ${axis_z}"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- 宏定义：差速控制 -->
+  <xacro:macro name="diffdriver" params="left_joint right_joint wheel_separation wheel_radius cmd_topic odom_topic odom_frame robot_frame joint_topic">
+    <!-- 差速控制 -->
+    <gazebo>
+      <!-- Gazebo差速控制插件 -->
+      <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+        <!-- 左轮joint名称 -->
+        <left_joint>${left_joint}</left_joint>
+        <!-- 右轮joint名称 -->
+        <right_joint>${right_joint}</right_joint>
+        <!-- 两轮中心距离 -->
+        <wheel_separation>${wheel_separation}</wheel_separation>
+        <!-- 轮子半径 -->
+        <wheel_radius>${wheel_radius}</wheel_radius>
+        <!-- 命令话题名称 -->
+        <topic>${cmd_topic}</topic>
+        <!-- 里程计话题名称 -->
+        <odom_topic>${odom_topic}</odom_topic>
+        <!-- 里程计坐标系 -->  
+        <frame_id>${odom_frame}</frame_id>
+        <!-- 机器人坐标系 -->
+        <child_frame_id>${robot_frame}</child_frame_id>
+        <!-- 更新频率 -->
+        <odom_publisher_frequency>40</odom_publisher_frequency>
+        <!-- tf话题名称 -->
+        <tf_topic>/tf</tf_topic>
+      </plugin>
+      <!-- Gazebo关节状态插件 -->
+      <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+        <topic>${joint_topic}</topic>
+        <joint_name>${left_joint}</joint_name>
+        <joint_name>${right_joint}</joint_name>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 宏定义：IMU -->
+  <xacro:macro name="imudriver" params="reference name topic">
+    <!-- 绑定到模型 -->
+    <gazebo reference="${reference}">
+      <!-- 类型和名称 -->
+      <sensor name="${name}" type="imu">
+        <!-- 保持打开 -->
+        <always_on>true</always_on>
+        <!-- 刷新率 -->
+        <update_rate>100</update_rate>
+        <!-- 话题 -->
+        <topic>${topic}</topic>
+        <!-- IMU配置 -->
+        <imu>
+          <!-- 陀螺仪噪声 -->
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <!-- 加速度计噪声 -->
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 宏定义：激光雷达 -->
+  <xacro:macro name="laserdriver" params="reference name pose_r pose_p pose_y topic frame_id">
+    <!-- 绑定到模型 -->
+    <gazebo reference="${reference}">
+      <!-- 类型和名称 -->
+      <sensor name="${name}" type="gpu_lidar">
+        <!-- 保持打开 -->
+        <always_on>true</always_on>
+        <!-- 可视化 -->
+        <visualize>true</visualize>
+        <!-- 挂载姿态 -->
+        <pose>0 0 0 ${pose_r} ${pose_p} ${pose_y}</pose>
+        <!-- 刷新频率 -->
+        <update_rate>40</update_rate>
+        <!-- 话题 -->
+        <topic>${topic}</topic>
+        <!-- 坐标系 -->
+        <gz_frame_id>${frame_id}</gz_frame_id>
+        <!-- 雷达配置 -->
+        <ray>
+          <scan>
+            <horizontal>
+              <!-- 采样点数量 -->
+              <samples>360</samples>
+              <!-- 分辨率 -->
+              <resolution>1</resolution>
+              <!-- 扫描的最小角度 -->
+              <min_angle>0</min_angle>
+              <!-- 扫描的最大角度 -->
+              <max_angle>6.28</max_angle>
+            </horizontal>
+          </scan>
+          <!-- 测距范围配置 -->
+          <range>
+            <!-- 最小测量距离 -->
+            <min>0.20</min>
+            <!-- 最大测量距离 -->
+            <max>20.0</max>
+            <!-- 分辨率 -->
+            <resolution>0.01</resolution>
+          </range>
+          <!-- 噪声模型 -->
+          <noise>
+            <!-- 噪声类型 -->
+            <type>gaussian</type>
+            <!-- 噪声均值 -->
+            <mean>0.0</mean>
+            <!-- 噪声强度 -->
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 宏定义：深度相机 -->
+  <xacro:macro name="cameradriver" params="reference name topic frame_id">
+    <!-- 绑定到模型 -->
+    <gazebo reference="${reference}">
+      <!-- 类型和名称 -->
+      <sensor name="${name}" type="depth">
+        <!-- 保持打开 -->
+        <always_on>true</always_on>
+        <!-- 可视化 -->
+        <visualize>true</visualize>
+        <!-- 刷新频率 -->
+        <update_rate>40</update_rate>
+        <!-- 话题 -->
+        <topic>${topic}</topic>
+        <!-- 坐标系 -->
+        <gz_frame_id>${frame_id}</gz_frame_id>
+        <!-- 相机配置 -->
+        <camera>
+          <!-- 水平视场角 -->
+          <horizontal_fov>1.047198</horizontal_fov>
+          <!-- 图像配置 -->
+          <image>
+            <!-- 图像宽度 -->
+            <width>1280</width>
+            <!-- 图像高度 -->
+            <height>720</height>
+            <!-- 图像颜色格式 -->
+            <format>R8G8B8</format>
+          </image>
+          <!-- 相机裁剪 -->
+          <clip>
+            <!-- 最近可见距离 -->
+            <near>0.2</near>
+            <!-- 最远可见距离 -->
+            <far>20</far>
+          </clip>
+        </camera>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

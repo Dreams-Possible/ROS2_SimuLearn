@@ -1,0 +1,149 @@
+from launch import LaunchContext
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+
+#结构发布节点
+def robot_pub_node():
+    #urdf文件路径
+    urdf_path=PathJoinSubstitution([
+        FindPackageShare('pkg_simu'),
+        'urdf',
+        'pkg.urdf',
+    ])
+    #urdf文件内容
+    urdf_file=""
+    with open(urdf_path.perform(LaunchContext()),"r",encoding="utf-8") as f:
+        urdf_file=f.read()
+    #拉起服务
+    node=Node(
+        #包名
+        package="robot_state_publisher",
+        #任务名
+        executable="robot_state_publisher",
+        #参数
+        parameters=[{'robot_description':urdf_file}],
+    )
+    return node
+
+#关节发布节点
+def joint_pub_node():
+    #拉起服务
+    node=Node(
+        #包名
+        package="joint_state_publisher",
+        #任务名
+        executable="joint_state_publisher",
+    )
+    return node
+
+#gazebo初始化节点
+def gazebo_init_node():
+    #world文件路径
+    world_path=PathJoinSubstitution([
+        FindPackageShare('pkg_simu'),
+        'gazebo',
+        'pkg.world',
+    ])
+    #拉起服务
+    node=IncludeLaunchDescription(
+        PathJoinSubstitution([
+            FindPackageShare('gazebo_ros'),
+            'launch',
+            'gazebo.launch.py',
+        ]),
+        launch_arguments={
+            'world':world_path.perform(LaunchContext()),
+            'verbose':'True',
+        }.items()
+    )
+    return node
+
+#gazebo加载节点
+def gazebo_load_node():
+    #拉起服务
+    node=Node(
+        #包名
+        package="gazebo_ros",
+        #任务名
+        executable="spawn_entity.py",
+        #参数
+        arguments=['-topic','/robot_description','-entity','robot_name'],
+    )
+    return node
+
+#导航初始化节点
+def nav2_init_node():
+    #map文件路径
+    map_path=PathJoinSubstitution([
+        FindPackageShare('pkg_simu'),
+        'map',
+        'pkg.yaml',
+    ])
+    #nav2文件路径
+    nav2_path=PathJoinSubstitution([
+        FindPackageShare('pkg_simu'),
+        'nav2',
+        'nav2_params.yaml',
+    ])
+    #拉起服务
+    node=IncludeLaunchDescription(
+        PathJoinSubstitution([
+            FindPackageShare('nav2_bringup'),
+            'launch',
+            'bringup_launch.py',
+        ]),
+        launch_arguments={
+            'map':map_path.perform(LaunchContext()),
+            'params_file':nav2_path.perform(LaunchContext()),
+        }.items()
+    )
+    return node
+
+#导航加载节点
+def nav2_load_node():
+    #拉起服务
+    node=Node(
+        #包名
+        package="pkg_simu",
+        #任务名
+        executable="pkg_init",
+    )
+    return node
+
+#rviz2加载节点
+def rviz2_load_node():
+    #rviz2文件路径
+    rviz2_path=PathJoinSubstitution([
+        FindPackageShare('pkg_simu'),
+        'nav2',
+        'nav2_default_view.rviz',
+    ])
+    #拉起服务
+    node=Node(
+        #包名
+        package="rviz2",
+        #任务名
+        executable="rviz2",
+        #参数
+        arguments=['-d',rviz2_path.perform(LaunchContext())],
+        #参数
+        parameters=[{'use_sim_time':True}],
+    )
+    return node
+
+#自启动
+def generate_launch_description():
+    #拉起所有服务
+    return LaunchDescription([
+        #服务
+        robot_pub_node(),
+        # joint_pub_node(),
+        gazebo_init_node(),
+        gazebo_load_node(),
+        nav2_init_node(),
+        nav2_load_node(),
+        rviz2_load_node(),
+    ])

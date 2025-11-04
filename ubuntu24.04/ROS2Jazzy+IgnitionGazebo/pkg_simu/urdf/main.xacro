@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_name">
+    <!-- 引入宏定义文件 -->
+    <xacro:include filename="./item.xacro"/>
+
+    <!-- 虚拟支撑 -->
+    <xacro:linker_support
+        name="base_footprint"
+    />
+
+    <!-- 主体 -->
+    <xacro:linker_cylinder
+        name="base_link"
+        radius="0.2"
+        length="0.1"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.8"
+        mass="0.5"
+        physics="True"
+    />
+    <xacro:joint_fixed
+        name="base_link_j"
+        parent="base_footprint"
+        child="base_link"
+        origin_xyz_x="0.0"
+        origin_xyz_y="0.0"
+        origin_xyz_z="0.055"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+    />
+
+    <!-- 左轮 -->
+    <xacro:linker_cylinder
+        name="left_wheel"
+        radius="0.04"
+        length="0.02"
+        origin_rpy_r="1.57"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.6"
+        mass="0.04"
+    />
+    <xacro:joint_continuous
+        name="left_wheel_j"
+        parent="base_link"
+        child="left_wheel"
+        origin_xyz_x="0.0"
+        origin_xyz_y="0.16"
+        origin_xyz_z="-0.02"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+        axis_x="0.0"
+        axis_y="1.0"
+        axis_z="0.0"
+    />
+
+    <!-- 右轮 -->
+    <xacro:linker_cylinder
+        name="right_wheel"
+        radius="0.04"
+        length="0.02"
+        origin_rpy_r="1.57"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.6"
+        mass="0.04"
+    />
+    <xacro:joint_continuous
+        name="right_wheel_j"
+        parent="base_link"
+        child="right_wheel"
+        origin_xyz_x="0.0"
+        origin_xyz_y="-0.16"
+        origin_xyz_z="-0.02"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+        axis_x="0.0"
+        axis_y="1.0"
+        axis_z="0.0"
+    />
+
+    <!-- 前万向轮 -->
+    <xacro:linker_sphere
+        name="front_wheel"
+        radius="0.02"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.5"
+        mass="0.02"
+    />
+    <xacro:joint_fixed
+        name="front_wheel_j"
+        parent="base_link"
+        child="front_wheel"
+        origin_xyz_x="0.16"
+        origin_xyz_y="0.0"
+        origin_xyz_z="-0.04"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+    />
+
+    <!-- 后万向轮 -->
+    <xacro:linker_sphere
+        name="back_wheel"
+        radius="0.02"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.5"
+        mass="0.02"
+    />
+    <xacro:joint_fixed
+        name="back_wheel_j"
+        parent="base_link"
+        child="back_wheel"
+        origin_xyz_x="-0.16"
+        origin_xyz_y="0.0"
+        origin_xyz_z="-0.04"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+    />
+
+    <!-- IMU -->
+    <xacro:linker_box
+        name="imu"
+        length="0.04"
+        width="0.02"
+        height="0.01"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.6"
+        mass="0.02"
+    />
+    <xacro:joint_fixed
+        name="imu_j"
+        parent="base_link"
+        child="imu"
+        origin_xyz_x="0.0"
+        origin_xyz_y="0.0"
+        origin_xyz_z="0.04"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+    />
+
+    <!-- 雷达 -->
+    <xacro:linker_cylinder
+        name="laser"
+        radius="0.08"
+        length="0.02"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.6"
+        mass="0.08"
+    />
+    <xacro:joint_fixed
+        name="laser_j"
+        parent="base_link"
+        child="laser"
+        origin_xyz_x="0.0"
+        origin_xyz_y="0.0"
+        origin_xyz_z="0.06"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+    />
+
+    <!-- 深度相机 -->
+    <xacro:linker_box
+        name="camera"
+        length="0.02"
+        width="0.08"
+        height="0.02"
+        color_r="1.0"
+        color_g="1.0"
+        color_b="1.0"
+        color_a="0.6"
+        mass="0.08"
+    />
+    <xacro:joint_fixed
+        name="camera_j"
+        parent="base_link"
+        child="camera"
+        origin_xyz_x="0.0"
+        origin_xyz_y="0.0"
+        origin_xyz_z="0.08"
+        origin_rpy_r="0.0"
+        origin_rpy_p="0.0"
+        origin_rpy_y="0.0"
+    />
+
+    <!-- 深度相机视角修正 -->
+    <xacro:linker_support
+        name="camera_optical"
+    />
+    <xacro:joint_fixed
+        name="camera_optical_j"
+        parent="base_link"
+        child="camera_optical"
+        origin_xyz_x="0.0"
+        origin_xyz_y="0.0"
+        origin_xyz_z="0.08"
+        origin_rpy_r="-1.57"
+        origin_rpy_p="0.0"
+        origin_rpy_y="-1.57"
+    />
+
+    <!-- 差速控制 -->
+    <xacro:diffdriver
+        left_joint="left_wheel_j"
+        right_joint="right_wheel_j"
+        wheel_separation="0.32"
+        wheel_radius="0.04"
+        cmd_topic="cmd_vel"
+        odom_topic="odom"
+        odom_frame="odom"
+        robot_frame="base_footprint"
+        joint_topic="joint_states"
+    />
+
+    <!-- IMU -->
+    <xacro:imudriver
+        reference="imu"
+        name="imu"
+        topic="imu"
+    />
+
+    <!-- 激光雷达 -->
+    <xacro:laserdriver
+        reference="laser"
+        name="laser"
+        pose_r="0.0"
+        pose_p="0.0"
+        pose_y="0.0"
+        topic="scan"
+        frame_id="laser"
+    />
+
+    <!-- 深度相机 -->
+    <xacro:cameradriver
+        reference="camera"
+        name="camera"
+        topic="camera/image_raw"
+        frame_id="camera_optical"
+    />
+
+</robot>
